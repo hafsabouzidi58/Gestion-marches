@@ -1,0 +1,65 @@
+name: CI Global (Back & Front)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # 1. Pipeline pour le Back-end (Spring Boot)
+  build-backend:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: gestion_marches_db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgresql
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Recuperer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Compiler et tester le Back-end
+        run: mvn -B verify
+        working-directory: ./backend  # <-- Précise que le back est dans le dossier backend/
+
+  # 2. Pipeline pour le Front-end
+  build-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Recuperer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Installer les dependances Front-end
+        run: npm install
+        working-directory: ./frontend  # <-- Précise que le front est dans le dossier frontend/
+
+      - name: Builder le Front-end
+        run: npm run build
+        working-directory: ./frontend  # <-- Lance le build (ex: Angular, React, Next.js)
