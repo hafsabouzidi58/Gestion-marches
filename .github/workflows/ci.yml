@@ -7,7 +7,6 @@ on:
     branches: [main]
 
 jobs:
-  # 1. Pipeline pour le Back-end (Spring Boot)
   build-backend:
     runs-on: ubuntu-latest
 
@@ -31,7 +30,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Installer Java 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '21'
@@ -39,9 +38,14 @@ jobs:
 
       - name: Compiler et tester le Back-end
         run: mvn -B verify
-        working-directory: ./backend  # <-- Précise que le back est dans le dossier backend/
+        working-directory: ./backend  # <-- Indique que le back est dans le dossier backend/
 
-  # 2. Pipeline pour le Front-end
+      - name: Sauvegarder le JAR (Artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-jar
+          path: backend/target/*.jar  # <-- Pointe vers le target du dossier backend/
+
   build-frontend:
     runs-on: ubuntu-latest
 
@@ -58,8 +62,8 @@ jobs:
 
       - name: Installer les dependances Front-end
         run: npm install
-        working-directory: ./frontend  # <-- Précise que le front est dans le dossier frontend/
+        working-directory: ./frontend  # <-- Indique que le front est dans le dossier frontend/
 
       - name: Builder le Front-end
         run: npm run build
-        working-directory: ./frontend  # <-- Lance le build (ex: Angular, React, Next.js)
+        working-directory: ./frontend  # <-- Lance le build du front-end
