@@ -1,0 +1,48 @@
+/* Fond en dégradé bleu professionnel pour le header */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+}
+
+/* Style de l'icône avatar */
+.avatar-icon-wrapper {
+  width: 52px;
+  height: 52px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Inputs personnalisés */
+.input-group-text {
+  background-color: #f8f9fa;
+  border-color: #dee2e6;
+}
+
+.form-control {
+  border-color: #dee2e6;
+  padding: 0.65rem 0.75rem;
+  font-size: 0.95rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.form-control:focus {
+  background-color: #fff !important;
+  box-shadow: none;
+  border-color: #2a5298;
+}
+
+/* Effet hover sur les boutons */
+.btn-primary {
+  background-color: #2a5298;
+  border-color: #2a5298;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #1e3c72;
+  border-color: #1e3c72;
+  transform: translateY(-1px);
+}
+
+.btn-primary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}

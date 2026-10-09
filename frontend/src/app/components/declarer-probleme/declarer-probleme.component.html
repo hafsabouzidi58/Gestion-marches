@@ -1,0 +1,229 @@
+<div class="container my-4">
+  <!-- FORMULAIRE EXISTANT (CONSERVÉ À 100%) -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h4><i class="bi bi-exclamation-triangle-fill"></i> Déclarer un Problème</h4>
+    </div>
+    <div class="card-body">
+
+      <div *ngIf="messageSucces" class="alert alert-success">{{ messageSucces }}</div>
+      <div *ngIf="messageErreur" class="alert alert-danger">{{ messageErreur }}</div>
+
+      <form [formGroup]="problemeForm" (ngSubmit)="onSubmit()">
+
+        <!-- Sélection du Marché -->
+        <!-- Sélection du Marché -->
+        <div class="mb-3">
+          <label for="marcheId" class="form-label fw-bold">Sélectionner le Marché *</label>
+          <select
+            id="marcheId"
+            class="form-select"
+            formControlName="marcheId"
+            [class.is-invalid]="problemeForm.get('marcheId')?.invalid && problemeForm.get('marcheId')?.touched">
+
+            <option value="" disabled selected>-- Choisir un marché par son numéro --</option>
+
+            <!-- 💡 Affichage du numéro du marché au lieu de l'ID -->
+            <option *ngFor="let m of marches" [value]="m.id">
+              N° {{ m.numMarche }} - {{ m.intitule }}
+            </option>
+          </select>
+
+          <div class="invalid-feedback">
+            Veuillez sélectionner un marché.
+          </div>
+        </div>
+
+        <!-- Titre -->
+        <div class="mb-3">
+          <label for="titre" class="form-label">Titre du problème <span class="text-danger">*</span></label>
+          <input type="text" id="titre" class="form-control" formControlName="titre" placeholder="Ex: Retard sur le lot N°2">
+        </div>
+
+        <!-- Priorité -->
+        <div class="mb-3">
+          <label for="priorite" class="form-label">Priorité <span class="text-danger">*</span></label>
+          <select id="priorite" class="form-select" formControlName="priorite">
+            <option *ngFor="let p of priorites" [value]="p">{{ p }}</option>
+          </select>
+        </div>
+
+        <!-- Description -->
+        <div class="mb-3">
+          <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
+          <textarea id="description" rows="4" class="form-control" formControlName="description"></textarea>
+        </div>
+
+        <!-- Pièces jointes -->
+        <div class="mb-3">
+          <label for="fichiers" class="form-label">Pièces jointes</label>
+          <input type="file" id="fichiers" class="form-control" multiple (change)="onFichiersSelect($event)">
+        </div>
+
+        <div *ngIf="fichiersSelectionnes.length > 0" class="mb-3">
+          <ul class="list-group">
+            <li *ngFor="let file of fichiersSelectionnes; let i = index" class="list-group-item d-flex justify-content-between align-items-center">
+              <span>{{ file.name }}</span>
+              <button type="button" class="btn btn-outline-danger btn-sm" (click)="retirerFichier(i)">Retirer</button>
+            </li>
+          </ul>
+        </div>
+
+        <button type="submit" class="btn btn-success" [disabled]="problemeForm.invalid || enCoursEnvoi">
+          {{ enCoursEnvoi ? 'Envoi...' : 'Déclarer le Problème' }}
+        </button>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- TABLEAU DE SUIVI AJOUTÉ DIRECTEMENT EN DESSOUS -->
+  <div class="card shadow-sm">
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">📋 Suivi de mes problèmes déclarés</h5>
+      <button class="btn btn-sm btn-outline-light" (click)="chargerMesProblemes()">
+        🔄 Rafraîchir
+      </button>
+    </div>
+    <div class="card-body">
+
+      <div *ngIf="mesProblemes.length === 0" class="text-muted text-center py-4">
+        <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+        Vous n'avez déclaré aucun problème pour le moment.
+      </div>
+
+      <div *ngIf="mesProblemes.length > 0" class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+          <tr>
+            <th>Date</th>
+            <th>Titre & Description</th>
+            <th>Priorité</th>
+            <th>État (Résolution)</th>
+            <th>Pièces jointes</th>
+            <th>Discussion</th> <!-- 💬 NOUVELLE COLONNE AJOUTÉE -->
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let p of mesProblemes">
+            <td class="text-nowrap">
+              <small>{{ p.dateDeclaration | date:'dd/MM/yyyy HH:mm' }}</small>
+            </td>
+            <td>
+              <strong>{{ p.titre }}</strong>
+              <div class="text-muted small text-truncate" style="max-width: 280px;">
+                {{ p.description }}
+              </div>
+            </td>
+            <td>
+                <span [ngClass]="{
+                  'badge bg-secondary': p.priorite === 'FAIBLE',
+                  'badge bg-info': p.priorite === 'MOYENNE',
+                  'badge bg-warning text-dark': p.priorite === 'HAUTE',
+                  'badge bg-danger': p.priorite === 'URGENTE'
+                }">
+                  {{ p.priorite }}
+                </span>
+            </td>
+            <td>
+              <!-- État mis à jour en temps réel selon la décision du Responsable de Marché -->
+              <span [ngClass]="{
+                  'badge bg-warning text-dark': p.etat === 'EN_ATTENTE',
+                  'badge bg-primary': p.etat === 'EN_COURS_DE_TRAITEMENT',
+                  'badge bg-success': p.etat === 'RESOLU',
+                  'badge bg-danger': p.etat === 'REJETE'
+                }">
+                  {{ p.etat }}
+                </span>
+            </td>
+            <td>
+              <div *ngIf="p.piecesJointesDeclaration && p.piecesJointesDeclaration.length > 0; else aucunFichier">
+                <button
+                  *ngFor="let pj of p.piecesJointesDeclaration"
+                  class="btn btn-sm btn-outline-primary me-1 mb-1"
+                  (click)="telechargerFichier(pj)"
+                  [title]="pj.nomFichier || pj.nomOriginal">
+                  📎 {{ pj.nomFichier || pj.nomOriginal }}
+                </button>
+              </div>
+              <ng-template #aucunFichier>
+                <span class="text-muted small">Aucun fichier</span>
+              </ng-template>
+            </td>
+            <td>
+              <!-- 💬 BOUTON POUR OUVRIR LE CHAT -->
+              <button class="btn btn-sm btn-outline-info text-nowrap" (click)="ouvrirChat(p)">
+                💬 Chat ({{ p.messages ? p.messages.length : 0 }})
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 💬 BOÎTE DE CHAT / DISCUSSION (AJOUTÉE EN DESSOUS DU TABLEAU) -->
+  <div *ngIf="problemeChat" class="card shadow-lg mt-4 border-info">
+    <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">💬 Discussion du problème : {{ problemeChat.titre }}</h5>
+      <button class="btn-close btn-close-white" (click)="fermerChat()"></button>
+    </div>
+
+    <!-- Zone des messages de discussion -->
+    <div class="card-body overflow-auto" style="max-height: 380px; background-color: #f8f9fa;">
+      <div *ngIf="!problemeChat.messages || problemeChat.messages.length === 0" class="text-center text-muted py-4">
+        <i class="bi bi-chat-left-dots fs-3 d-block mb-2"></i>
+        Aucun message pour le moment. Démarrez la discussion avec le responsable du marché !
+      </div>
+
+      <div *ngFor="let msg of problemeChat.messages" class="mb-3 d-flex"
+           [ngClass]="{'justify-content-end': msg.auteurId === utilisateurConnecteId}">
+        <div class="p-3 rounded shadow-sm" style="max-width: 75%;"
+             [ngClass]="msg.auteurId === utilisateurConnecteId ? 'bg-primary text-white' : 'bg-white border text-dark'">
+
+          <div class="fw-bold small mb-1 opacity-75">
+            {{ msg.auteurNom }}
+          </div>
+
+          <div>{{ msg.contenu }}</div>
+
+          <!-- Pièces jointes rattachées au message -->
+          <div *ngIf="msg.piecesJointes && msg.piecesJointes.length > 0" class="mt-2 pt-2 border-top border-secondary">
+            <small class="d-block mb-1 opacity-75">Fichiers joints :</small>
+            <button *ngFor="let pj of msg.piecesJointes"
+                    class="btn btn-sm btn-light border text-dark me-1 mb-1"
+                    (click)="telechargerFichier(pj)">
+              📎 {{ pj.nomFichier }}
+            </button>
+          </div>
+
+          <small class="d-block text-end mt-2 opacity-75" style="font-size: 0.7rem;">
+            {{ msg.dateEnvoi | date:'dd/MM/yyyy HH:mm' }}
+          </small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Saisie et envoi de message -->
+    <div class="card-footer bg-white">
+      <div class="input-group mb-2">
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="nouveauMessageTexte"
+               placeholder="Écrire un message..."
+               (keyup.enter)="envoyerMessage()">
+        <!-- 💡 Désactivation mise à jour pour réagir à l'absence simultanée de texte ET de fichiers -->
+        <button class="btn btn-primary" (click)="envoyerMessage()" [disabled]="enCoursEnvoiMessage || (!nouveauMessageTexte?.trim() && fichiersMessage.length === 0)">
+          {{ enCoursEnvoiMessage ? 'Envoi...' : 'Envoyer' }}
+        </button>
+      </div>
+      <div>
+        <label for="fichiersMessage" class="form-label small text-muted mb-1">Joindre des fichiers au message (optionnel) :</label>
+        <input type="file" id="fichiersMessage" class="form-control form-control-sm" multiple (change)="onFichiersMessageSelect($event)">
+      </div>
+    </div>
+  </div>
+
+</div>

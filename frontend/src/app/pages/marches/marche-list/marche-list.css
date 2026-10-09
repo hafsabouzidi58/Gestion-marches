@@ -1,0 +1,671 @@
+/* Conteneur principal */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+/* En-tête : Titre aligné à gauche, Bouton à droite */
+.container > .d-flex.justify-content-between {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.container h2 {
+  font-size: 1.6rem !important;
+  font-weight: 700 !important;
+  color: #1e293b !important;
+  margin: 0 !important;
+}
+
+/* Bouton Nouveau Marché */
+a.btn.btn-primary {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+  padding: 0.625rem 1.25rem !important;
+  font-size: 0.9rem !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  border: none !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2) !important;
+}
+
+a.btn.btn-primary:hover {
+  background-color: #1d4ed8 !important;
+}
+
+/* Carte Barre d'outils (Recherche + Alertes) */
+.card.bg-light {
+  background-color: #ffffff !important;
+  border-radius: 12px !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+  padding: 1.25rem !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.row.g-3 {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  margin: 0 -0.5rem !important;
+}
+
+.col-md-6 {
+  flex: 0 0 50% !important;
+  max-width: 50% !important;
+  padding: 0 0.5rem !important;
+  box-sizing: border-box !important;
+}
+
+/* Champ de Recherche et Son Bouton */
+.input-group {
+  display: flex !important;
+  width: 100% !important;
+}
+
+.input-group .form-control {
+  flex: 1 1 auto !important;
+  border: 1px solid #cbd5e1 !important;
+  border-top-left-radius: 8px !important;
+  border-bottom-left-radius: 8px !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  padding: 0.625rem 0.875rem !important;
+  font-size: 0.9rem !important;
+  outline: none !important;
+  height: 42px !important;
+}
+
+.input-group .btn-outline-secondary {
+  border: 1px solid #cbd5e1 !important;
+  border-left: none !important;
+  border-top-right-radius: 8px !important;
+  border-bottom-right-radius: 8px !important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  background-color: #f8fafc !important;
+  color: #475569 !important;
+  font-weight: 600 !important;
+  padding: 0 1rem !important;
+  height: 42px !important;
+  cursor: pointer !important;
+}
+
+.input-group .btn-outline-secondary:hover {
+  background-color: #e2e8f0 !important;
+}
+
+/* Alignement Droite pour Bouton Alertes */
+.text-end {
+  text-align: right !important;
+}
+
+/* Boutons d'Alerte */
+.btn-outline-danger {
+  border: 1px solid #ef4444 !important;
+  color: #dc2626 !important;
+  background-color: #ffffff !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  padding: 0.5rem 1rem !important;
+  height: 42px !important;
+}
+
+.btn-outline-danger:hover {
+  background-color: #fef2f2 !important;
+}
+
+.btn-danger {
+  background-color: #dc2626 !important;
+  border: 1px solid #dc2626 !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  padding: 0.5rem 1rem !important;
+  height: 42px !important;
+}
+
+/* Tableau */
+.table-responsive {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  border: 1px solid #e2e8f0 !important;
+  background-color: #ffffff !important;
+}
+
+.table {
+  width: 100% !important;
+  margin-bottom: 0 !important;
+  border-collapse: collapse !important;
+}
+
+.table-dark th {
+  background-color: #1e293b !important;
+  color: #ffffff !important;
+  font-size: 0.75rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  padding: 1rem !important;
+  border: none !important;
+}
+
+.table td {
+  padding: 0.875rem 1rem !important;
+  vertical-align: middle !important;
+  color: #334155 !important;
+  font-size: 0.9rem !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+}
+
+.badge.bg-secondary {
+  background-color: #f1f5f9 !important;
+  color: #475569 !important;
+  padding: 0.25rem 0.5rem !important;
+  border-radius: 6px !important;
+  font-size: 0.8rem !important;
+}
+
+/* Actions Éditer / Supprimer */
+.btn-sm {
+  padding: 0.35rem 0.65rem !important;
+  font-size: 0.825rem !important;
+  border-radius: 6px !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.btn-outline-warning {
+  border: 1px solid #f59e0b !important;
+  color: #d97706 !important;
+  background-color: #ffffff !important;
+}
+
+.btn-outline-warning:hover {
+  background-color: #fffbeb !important;
+}
+
+.btn-outline-danger {
+  border: 1px solid #fca5a5 !important;
+  color: #dc2626 !important;
+}
+/* Style pour les marchés inactifs (lignes grisées) */
+tr.table-disabled {
+  background-color: #f1f5f9 !important;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+}
+
+tr.table-disabled td {
+  color: #94a3b8 !important;
+  font-style: italic;
+}
+
+/* Conserver la lisibilité du badge de statut même en mode inactif */
+tr.table-disabled .status-badge.inactive {
+  opacity: 1 !important;
+  font-style: normal;
+}
+
+/* Curseur interdisant l'interaction sur le bouton d'édition verrouillé */
+button:disabled {
+  cursor: not-allowed !important;
+  opacity: 0.5 !important;
+
+}
+  /* Bouton Info/Détails */
+  .btn-outline-info {
+    border-color: #0ea5e9 !important;
+    color: #0284c7 !important;
+  }
+
+  .btn-outline-info:hover {
+    background-color: #e0f2fe !important;
+    color: #0369a1 !important;
+  }
+
+  /* Modale */
+  .modal-content {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .modal-header {
+    background-color: #1e293b !important;
+  }
+/* --- Overlay & Modal Container --- */
+.custom-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.custom-modal-dialog {
+  background: #ffffff;
+  width: 90%;
+  max-width: 750px;
+  border-radius: 16px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  animation: slideUp 0.25s ease-out;
+}
+
+/* --- En-tête --- */
+.custom-modal-header {
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  color: #ffffff;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-icon {
+  font-size: 1.25rem;
+}
+
+.btn-close-custom {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.btn-close-custom:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* --- Corps & Cartes --- */
+.custom-modal-body {
+  padding: 24px;
+  max-height: 75vh;
+  overflow-y: auto;
+  background-color: #f8fafc;
+}
+
+.detail-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.detail-card-title {
+  color: #334155;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #f1f5f9;
+}
+
+/* --- Grille des champs --- */
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.detail-grid.cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.detail-item.full-width {
+  grid-column: span 2;
+}
+
+.detail-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.detail-value {
+  font-size: 0.92rem;
+  color: #1e293b;
+}
+
+/* --- Badges de Statut --- */
+.status-pill {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  width: fit-content;
+}
+
+.status-pill.active {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.status-pill.inactive {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+/* --- Pied de page --- */
+.custom-modal-footer {
+  padding: 14px 24px;
+  background-color: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-close-modal {
+  background-color: #64748b;
+  color: #ffffff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-close-modal:hover {
+  background-color: #475569;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(15px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+/* --- SECTION GED & DOCUMENTS --- */
+
+/* Titre de section */
+.detail-card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1rem;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+/* Zone d'Upload Dropzone */
+.upload-zone {
+  background: #f8fafc;
+  border: 2px dashed #cbd5e1;
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: all 0.25s ease-in-out;
+}
+
+.upload-zone:hover {
+  border-color: #2563eb;
+  background-color: #f0f6ff;
+}
+
+/* Form Controls (Select & Inputs) */
+.ged-select,
+.ged-input {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.875rem;
+  color: #334155;
+  background-color: #ffffff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.ged-select:focus,
+.ged-input:focus {
+  border-color: #2563eb;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* Input file custom */
+.ged-input::file-selector-button {
+  background-color: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  margin-right: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.ged-input::file-selector-button:hover {
+  background-color: #e2e8f0;
+  color: #0f172a;
+}
+
+/* Bouton Téléverser / Joindre */
+.btn-upload {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+  transition: all 0.2s ease;
+}
+
+.btn-upload:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-upload:disabled {
+  background: #cbd5e1;
+  color: #94a3b8;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Tableau des documents */
+.ged-table-container {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.ged-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.ged-table thead th {
+  background-color: #f8fafc;
+  color: #64748b;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.ged-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.ged-table tbody tr:not(:last-child) td {
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.ged-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.ged-table td {
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: #334155;
+  vertical-align: middle;
+}
+
+/* Badges de Type Document */
+.badge-doc {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 6px;
+  background-color: #e2e8f0;
+  color: #334155;
+}
+
+/* Actions */
+.btn-action-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.btn-action-icon.download:hover {
+  background-color: #10b981;
+  border-color: #10b981;
+  color: #ffffff;
+}
+
+.btn-action-icon.delete:hover {
+  background-color: #ef4444;
+  border-color: #ef4444;
+  color: #ffffff;
+}
+
+/* Message aucun document */
+.empty-state {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #94a3b8;
+  font-size: 0.875rem;
+}
+
+/* Container principal (Remplace la carte grise Bootstrap standard) */
+.card.bg-light {
+  background-color: #f8fafc !important;
+  border: 2px dashed #cbd5e1 !important;
+  border-radius: 12px;
+  transition: all 0.2s ease-in-out;
+}
+
+.card.bg-light:hover {
+  border-color: #3b82f6 !important;
+  background-color: #f0f9ff !important;
+}
+
+/* Label du champ */
+.form-label {
+  color: #475569;
+  letter-spacing: 0.01em;
+}
+
+/* Field Input Fichier */
+.form-control-sm {
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background-color: #ffffff;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.85rem;
+}
+
+.form-control-sm:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+/* Bouton intégré dans le champ input ("Choisir un fichier") */
+.form-control-sm::file-selector-button {
+  background-color: #e2e8f0;
+  color: #1e293b;
+  border: none;
+  border-radius: 6px;
+  padding: 0.2rem 0.6rem;
+  margin-right: 0.6rem;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.form-control-sm::file-selector-button:hover {
+  background-color: #cbd5e1;
+}
+
+/* Bouton Téléverser */
+.btn-primary.btn-sm {
+  background-color: #2563eb;
+  border: none;
+  border-radius: 8px;
+  padding: 0.45rem 0.8rem;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.btn-primary.btn-sm:hover:not(:disabled) {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.25);
+}
+
+/* État Désactivé du bouton */
+.btn-primary.btn-sm:disabled {
+  background-color: #94a3b8;
+  opacity: 0.65;
+  cursor: not-allowed;
+}

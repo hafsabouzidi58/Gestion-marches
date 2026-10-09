@@ -1,0 +1,216 @@
+<div class="user-container">
+
+  <h2>👥 Gestion des Utilisateurs</h2>
+
+
+  <!-- Message succès -->
+  <div
+    *ngIf="successMessage"
+    class="message success-message">
+
+    {{ successMessage }}
+
+  </div>
+
+
+  <!-- Message erreur -->
+  <div
+    *ngIf="errorMessage"
+    class="message error-message">
+
+    {{ errorMessage }}
+
+  </div>
+
+
+  <!-- Ajouter utilisateur -->
+  <div class="card form-card">
+
+    <h3>Ajouter un utilisateur</h3>
+
+    <form
+      (ngSubmit)="addUser()"
+      class="user-form">
+
+      <input
+        type="text"
+        [(ngModel)]="newUser.nom"
+        name="nom"
+        placeholder="Nom"
+        required
+      />
+
+      <input
+        type="text"
+        [(ngModel)]="newUser.prenom"
+        name="prenom"
+        placeholder="Prénom"
+        required
+      />
+
+      <input
+        type="email"
+        [(ngModel)]="newUser.email"
+        name="email"
+        placeholder="Email"
+        required
+      />
+
+      <input
+        type="password"
+        [(ngModel)]="newUser.motDePasse"
+        name="motDePasse"
+        placeholder="Mot de passe"
+        required
+      />
+
+      <select
+        [(ngModel)]="newUser.role"
+        name="role"
+        required>
+
+        <option value="ADMIN_SYSTEME">
+          ADMIN_SYSTEME
+        </option>
+
+        <option value="RESPONSABLE_MARCHES">
+          RESPONSABLE_MARCHES
+        </option>
+
+        <option value="RESPONSABLE_GREEN_WOOD">
+          RESPONSABLE_GREEN_WOOD
+        </option>
+
+      </select>
+
+
+      <button
+        type="submit"
+        class="btn-add"
+        [disabled]="adding">
+
+        {{ adding ? 'Ajout...' : 'Ajouter' }}
+
+      </button>
+
+    </form>
+
+  </div>
+
+
+  <!-- Liste -->
+  <div class="card table-card">
+
+    <h3>Liste des utilisateurs</h3>
+
+
+    <div
+      *ngIf="loading"
+      class="loading">
+
+      Chargement...
+
+    </div>
+
+
+    <table *ngIf="!loading">
+
+      <thead>
+
+      <tr>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Email</th>
+        <th>Rôle</th>
+        <th>Statut</th>
+        <th>Action</th>
+      </tr>
+
+      </thead>
+
+
+      <tbody>
+
+      <tr *ngFor="let user of users">
+
+        <td>
+          {{ user.id }}
+        </td>
+
+        <td>
+          {{ user.nom }}
+        </td>
+
+        <td>
+          {{ user.prenom }}
+        </td>
+
+        <td>
+          {{ user.email }}
+        </td>
+
+        <td>
+          <span class="badge">
+            {{ user.role }}
+          </span>
+        </td>
+
+        <td>
+
+          <span
+            class="status-badge"
+            [class.active]="user.actif"
+            [class.inactive]="!user.actif">
+
+            {{ user.actif ? 'Actif' : 'Désactivé' }}
+
+          </span>
+
+        </td>
+
+        <td>
+
+          <button
+            *ngIf="user.actif"
+            class="btn-disable"
+            (click)="toggleUserStatus(user)">
+
+            Désactiver
+
+          </button>
+
+
+          <button
+            *ngIf="!user.actif"
+            class="btn-enable"
+            (click)="toggleUserStatus(user)">
+
+            Activer
+
+          </button>
+
+        </td>
+
+      </tr>
+
+
+      <tr *ngIf="users.length === 0">
+
+        <td
+          colspan="7"
+          class="empty">
+
+          Aucun utilisateur.
+
+        </td>
+
+      </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

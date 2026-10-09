@@ -1,0 +1,156 @@
+<div class="container-fluid py-4 edit-container" *ngIf="prestataire">
+  <!-- En-tête -->
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+      <h3 class="fw-bold text-success m-0">
+        🏢 Mes Informations Sociétaires & Financières
+      </h3>
+      <p class="text-muted small m-0">
+        Mise à jour de la fiche du Prestataire : <strong class="text-dark">{{ prestataire.nomSociete }}</strong>
+      </p>
+    </div>
+    <span class="badge bg-success-subtle text-success border border-success px-3 py-2 fs-6 rounded-pill">
+      🌲 Espace Green Wood
+    </span>
+  </div>
+
+  <form (ngSubmit)="onSubmit()" #editForm="ngForm">
+    <div class="row g-4">
+
+      <!-- Section 1 : Informations Juridiques & Légales -->
+      <div class="col-lg-6">
+        <div class="card border-0 shadow-sm rounded-3 overflow-hidden h-100">
+          <div class="card-header bg-success text-white py-3">
+            <h5 class="card-title m-0 fw-semibold">📜 Identifiants Légaux</h5>
+          </div>
+          <div class="card-body p-4">
+
+            <div class="mb-3">
+              <label for="nomSociete" class="form-label fw-semibold">Raison Sociale / Nom Société <span class="text-danger">*</span></label>
+              <input
+                type="text"
+                id="nomSociete"
+                class="form-control"
+                [(ngModel)]="prestataire.nomSociete"
+                name="nomSociete"
+                required
+              />
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label for="rc" class="form-label fw-semibold">Registre de Commerce (RC) <span class="text-danger">*</span></label>
+                <input
+                  type="text"
+                  id="rc"
+                  class="form-control"
+                  [(ngModel)]="prestataire.rc"
+                  name="rc"
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="patente" class="form-label fw-semibold">N° Patente <span class="text-danger">*</span></label>
+                <input
+                  type="text"
+                  id="patente"
+                  class="form-control"
+                  [(ngModel)]="prestataire.patente"
+                  name="patente"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label for="identifiantFiscal" class="form-label fw-semibold">Identifiant Fiscal (IF) <span class="text-danger">*</span></label>
+                <input
+                  type="text"
+                  id="identifiantFiscal"
+                  class="form-control"
+                  [(ngModel)]="prestataire.identifiantFiscal"
+                  name="identifiantFiscal"
+                  required
+                />
+              </div>
+              <div class="col-md-6">
+                <label for="cnss" class="form-label fw-semibold">N° CNSS</label>
+                <input
+                  type="text"
+                  id="cnss"
+                  class="form-control"
+                  [(ngModel)]="prestataire.cnss"
+                  name="cnss"
+                  placeholder="Ex: 1234567"
+                />
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="adresse" class="form-label fw-semibold">Adresse du Siège Social</label>
+              <textarea
+                id="adresse"
+                class="form-control"
+                rows="2"
+                [(ngModel)]="prestataire.adresse"
+                name="adresse">
+              </textarea>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2 : Coordonnées Bancaires -->
+      <div class="col-lg-6">
+        <div class="card border-0 shadow-sm rounded-3 overflow-hidden h-100">
+          <div class="card-header bg-dark text-white py-3">
+            <h5 class="card-title m-0 fw-semibold">🏦 Coordonnées Bancaires</h5>
+          </div>
+          <div class="card-body p-4 d-flex flex-column justify-content-between">
+
+            <div>
+              <div class="mb-3">
+                <label for="banque" class="form-label fw-semibold">Établissement Bancaire <span class="text-danger">*</span></label>
+                <input
+                  type="text"
+                  id="banque"
+                  class="form-control"
+                  [(ngModel)]="prestataire.banque"
+                  name="banque"
+                  placeholder="Ex: Attijariwafa Bank, BMCE..."
+                  required
+                />
+              </div>
+
+              <div class="mb-3">
+                <label for="cle_rib" class="form-label fw-semibold">Clé / RIB Bancaire</label>
+                <input
+                  type="text"
+                  id="cle_rib"
+                  class="form-control font-monospace"
+                  [(ngModel)]="prestataire.cle_rib"
+                  name="cle_rib"
+                  placeholder="Ex: 24 chiffres RIB"
+                />
+              </div>
+            </div>
+
+            <!-- Actions du Formulaire -->
+            <div class="d-flex align-items-center justify-content-end gap-2 pt-3 border-top mt-4">
+              <button type="button" class="btn btn-outline-secondary px-4" (click)="cancel()">
+                Annuler
+              </button>
+              <button type="submit" class="btn btn-success px-4" [disabled]="!editForm.form.valid">
+                💾 Enregistrer les modifications
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </form>
+</div>

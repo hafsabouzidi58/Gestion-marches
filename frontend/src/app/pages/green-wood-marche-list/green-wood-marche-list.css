@@ -1,0 +1,151 @@
+/* ========================================== */
+/* STYLES DE BASE & TABLEAU                   */
+/* ========================================== */
+.status-badge {
+  padding: 0.35rem 0.65rem;
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.status-badge.active {
+  background-color: #d1e7dd;
+  color: #0f5132;
+}
+
+.status-badge.inactive {
+  background-color: #e2e3e5;
+  color: #41464b;
+}
+
+.table-disabled {
+  opacity: 0.6;
+  background-color: #f8f9fa;
+}
+
+/* ========================================== */
+/* MODAL POPUP PERSONNALISÉ (CONSULTATION)     */
+/* ========================================== */
+
+/* Fond sombre flouté derrière la fenêtre */
+.custom-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  backdrop-filter: blur(3px);
+}
+
+/* Fenêtre principale du Modal */
+.custom-modal-dialog {
+  background: #ffffff;
+  width: 90%;
+  max-width: 650px;
+  max-height: 85vh;
+  overflow-y: auto;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  animation: modalSlideDown 0.25s ease-out;
+}
+
+@keyframes modalSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* En-tête */
+.custom-modal-header {
+  padding: 1.1rem 1.5rem;
+  border-bottom: 1px solid #e9ecef;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f8f9fa;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.modal-icon {
+  font-size: 1.25rem;
+}
+
+.btn-close-custom {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #6c757d;
+  cursor: pointer;
+  padding: 0 0.5rem;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.btn-close-custom:hover {
+  color: #000;
+}
+
+/* Corps du Modal */
+.custom-modal-body {
+  padding: 1.5rem;
+}
+
+/* Cartes d'information dans le modal */
+.detail-card {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  padding: 1.25rem;
+}
+
+.detail-card-title {
+  font-weight: 700;
+  color: #198754;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #198754;
+  padding-bottom: 0.3rem;
+  display: inline-block;
+}
+
+/* Grille des champs */
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.1rem;
+}
+
+.detail-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-item.full-width {
+  grid-column: span 2;
+}
+
+.detail-label {
+  font-size: 0.75rem;
+  color: #6c757d;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.2rem;
+}
+
+.detail-value {
+  font-size: 0.95rem;
+  color: #212529;
+}

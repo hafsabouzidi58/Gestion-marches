@@ -1,0 +1,403 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>📋 Gestion des Marchés</h2>
+    <a routerLink="/responsable-marches/marches/nouveau" class="btn btn-primary">
+      ➕ Nouveau Marché
+    </a>
+  </div>
+
+  <!-- Barre d'outils -->
+  <div class="card p-3 mb-4 bg-light shadow-sm">
+    <div class="row g-3 align-items-center">
+      <div class="col-md-6">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Rechercher par N° Marché, Objet, Prestataire..."
+            [(ngModel)]="searchTerm"
+            (keyup.enter)="onSearch()"
+          />
+          <button class="btn btn-outline-secondary" (click)="onSearch()">🔍 Rechercher</button>
+        </div>
+      </div>
+
+      <div class="col-md-6 text-end">
+        <button
+          class="btn"
+          [ngClass]="isAlerteMode ? 'btn-danger' : 'btn-outline-danger'"
+          (click)="loadAlertes()">
+          ⚠️ Alertes Échéance (30j)
+        </button>
+        <button *ngIf="isAlerteMode" class="btn btn-link text-secondary" (click)="loadMarches()">
+          Réinitialiser la liste
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tableau des marchés -->
+  <div class="table-responsive shadow-sm rounded">
+    <table class="table table-hover align-middle bg-white mb-0">
+      <thead class="table-dark">
+      <tr>
+        <th>N° Marché</th>
+        <th>Objet</th>
+        <th>Prestataire</th>
+        <th>Exercice</th>
+        <th>Budget Total</th>
+        <th>Reste à Payer</th>
+        <th>Approbation</th>
+        <th>Fin Prévue</th>
+        <th>Statut</th>
+        <th class="text-center">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let m of marches" [class.table-disabled]="!m.actif">
+        <td><strong>{{ m.numMarche }}</strong></td>
+        <td>{{ m.objetMarche }}</td>
+        <td>{{ m.nomPrestataire || 'N/A' }}</td>
+        <td><span class="badge bg-secondary">{{ m.exercice }}</span></td>
+        <td><span class="fw-bold">{{ (m.budget || 0) | number:'1.2-2' }} DH</span></td>
+        <td>
+          <span class="badge bg-warning text-dark">
+            {{ (soldeRestantMap[m.id!] !== undefined ? soldeRestantMap[m.id!] : m.budget) | number:'1.2-2' }} DH
+          </span>
+        </td>
+        <td>{{ m.dateApprobation | date:'dd/MM/yyyy' }}</td>
+        <td>
+            <span [ngClass]="{'text-danger fw-bold': isAlerteMode}">
+              {{ m.dateFinPrevue | date:'dd/MM/yyyy' }}
+            </span>
+        </td>
+        <td>
+            <span class="status-badge" [ngClass]="m.actif ? 'active' : 'inactive'">
+              {{ m.actif ? '● Actif' : '○ Inactif' }}
+            </span>
+        </td>
+        <td class="text-center">
+          <button class="btn btn-sm btn-outline-info me-1" (click)="openDetailsModal(m)" title="Voir les détails">
+            👁️
+          </button>
+          <!-- CONSULTER LA LISTE DES DÉCOMPTES -->
+          <button class="btn btn-sm btn-outline-dark me-1" (click)="openDecomptesListModal(m)" title="Consulter les décomptes">
+            📋 Décomptes
+          </button>
+          <!-- SAISIR UN DÉCOMPTE -->
+          <button class="btn btn-sm btn-outline-success me-1" (click)="openDecompteModal(m)" title="Saisir un décompte">
+            💰 +Décompte
+          </button>
+          <button class="btn btn-sm btn-outline-secondary me-1" (click)="openDocsModal(m)" title="Gérer les documents">
+            📂 Documents
+          </button>
+          <button class="btn btn-sm btn-outline-primary me-1" (click)="onToggleStatus(m.id!)" title="Changer statut">
+            🔄
+          </button>
+          <a *ngIf="m.actif"
+             [routerLink]="['/responsable-marches/marches/edit', m.id!]"
+             class="btn btn-sm btn-outline-warning"
+             title="Éditer">
+            ✏️ Edit
+          </a>
+          <button *ngIf="!m.actif"
+                  class="btn btn-sm btn-outline-secondary"
+                  disabled
+                  title="Impossible d'éditer un marché inactif">
+            🔒 Edit
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="marches.length === 0">
+        <td colspan="10" class="text-center text-muted py-4">Aucun marché trouvé.</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 1. MODAL DÉTAILS DU MARCHÉ                -->
+<!-- ========================================== -->
+<div class="custom-modal-overlay" *ngIf="selectedMarcheDetails" (click)="closeDetailsModal()">
+  <div class="custom-modal-dialog" (click)="$event.stopPropagation()">
+    <div class="custom-modal-header">
+      <div class="d-flex align-items-center gap-2">
+        <span class="modal-icon">📄</span>
+        <h5 class="m-0 fw-bold">Détails du Marché N° {{ selectedMarcheDetails.numMarche }}</h5>
+      </div>
+      <button type="button" class="btn-close-custom" (click)="closeDetailsModal()">✕</button>
+    </div>
+
+    <div class="custom-modal-body">
+      <div class="detail-card mb-4">
+        <h6 class="detail-card-title">📌 Informations Générales</h6>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-label">Mode de Passation</span>
+            <span class="detail-value">{{ selectedMarcheDetails.modePassation || 'N/A' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">N° Visa</span>
+            <span class="detail-value">{{ selectedMarcheDetails.visaNumero || 'N/A' }}</span>
+          </div>
+          <div class="detail-item full-width">
+            <span class="detail-label">Objet du Marché</span>
+            <span class="detail-value fw-semibold text-dark">{{ selectedMarcheDetails.objetMarche }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Prestataire</span>
+            <span class="detail-value text-primary fw-bold">{{ selectedMarcheDetails.nomPrestataire || 'N/A' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Statut</span>
+            <span class="status-pill" [class.active]="selectedMarcheDetails.actif" [class.inactive]="!selectedMarcheDetails.actif">
+              {{ selectedMarcheDetails.actif ? '● Actif' : '○ Inactif' }}
+            </span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Date d'Approbation</span>
+            <span class="detail-value">{{ selectedMarcheDetails.dateApprobation | date:'dd/MM/yyyy' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Date Fin Prévue</span>
+            <span class="detail-value text-danger fw-bold">{{ selectedMarcheDetails.dateFinPrevue | date:'dd/MM/yyyy' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-card mb-4">
+        <h6 class="detail-card-title">💳 Imputation Budgétaire & Suivi Financier</h6>
+        <div class="detail-grid cols-3">
+          <div class="detail-item">
+            <span class="detail-label">Exercice</span>
+            <span class="detail-value">{{ selectedMarcheDetails.exercice || 'N/A' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Budget Total</span>
+            <span class="detail-value text-success fw-bold">{{ (selectedMarcheDetails.budget || 0) | number:'1.2-2' }} DH</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Reste à Payer</span>
+            <span class="detail-value text-danger fw-bold">
+              {{ (soldeRestantMap[selectedMarcheDetails.id!] !== undefined ? soldeRestantMap[selectedMarcheDetails.id!] : selectedMarcheDetails.budget) | number:'1.2-2' }} DH
+            </span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Article</span>
+            <span class="detail-value">{{ selectedMarcheDetails.article || 'N/A' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Paragraphe</span>
+            <span class="detail-value">{{ selectedMarcheDetails.paragraphe || 'N/A' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Ligne</span>
+            <span class="detail-value">{{ selectedMarcheDetails.ligne || 'N/A' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Rubrique</span>
+            <span class="detail-value">{{ selectedMarcheDetails.rubrique || 'N/A' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end gap-2">
+        <button class="btn btn-outline-dark" (click)="closeDetailsModal(); openDecomptesListModal(selectedMarcheDetails)">
+          📋 Voir l'historique des décomptes
+        </button>
+        <button class="btn btn-success" (click)="closeDetailsModal(); openDecompteModal(selectedMarcheDetails)">
+          💰 Saisir un Décompte
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 2. MODAL DÉDIÉ À LA SAISIE D'UN DÉCOMPTE  -->
+<!-- ========================================== -->
+<div class="custom-modal-overlay" *ngIf="selectedMarcheForDecompte" (click)="closeDecompteModal()">
+  <div class="custom-modal-dialog" (click)="$event.stopPropagation()">
+    <div class="custom-modal-header">
+      <div class="d-flex align-items-center gap-2">
+        <span class="modal-icon">💰</span>
+        <h5 class="m-0 fw-bold">Saisie d'un Décompte - Marché N° {{ selectedMarcheForDecompte.numMarche }}</h5>
+      </div>
+      <button type="button" class="btn-close-custom" (click)="closeDecompteModal()">✕</button>
+    </div>
+
+    <div class="custom-modal-body">
+      <div class="alert alert-info py-2 mb-3">
+        <strong>Solde disponible :</strong>
+        {{ (soldeRestantMap[selectedMarcheForDecompte.id!] !== undefined ? soldeRestantMap[selectedMarcheForDecompte.id!] : selectedMarcheForDecompte.budget) | number:'1.2-2' }} DH
+      </div>
+
+      <div *ngIf="decompteErrorMessage" class="alert alert-danger mb-3 p-2 rounded">
+        ⚠️ {{ decompteErrorMessage }}
+      </div>
+      <div *ngIf="decompteSuccessMessage" class="alert alert-success mb-3 p-2 rounded">
+        ✅ {{ decompteSuccessMessage }}
+      </div>
+
+      <form [formGroup]="decompteForm" (ngSubmit)="onSubmitDecompte()">
+        <div class="mb-3">
+          <label class="form-label fw-bold">Numéro de Décompte <span class="text-danger">*</span></label>
+          <input
+            type="text"
+            formControlName="numDecompte"
+            class="form-control"
+            placeholder="Ex: N°1"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold">Montant Brut (DH) <span class="text-danger">*</span></label>
+          <input
+            type="number"
+            step="0.01"
+            formControlName="montantBrut"
+            class="form-control"
+            placeholder="Ex: 15000.00"
+          />
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mt-4">
+          <button type="button" class="btn btn-secondary" (click)="closeDecompteModal()">Annuler</button>
+          <button type="submit" class="btn btn-primary" [disabled]="decompteForm.invalid || isSubmittingDecompte">
+            <span *ngIf="isSubmittingDecompte" class="spinner-border spinner-border-sm me-1"></span>
+            {{ isSubmittingDecompte ? 'Enregistrement...' : 'Enregistrer le décompte' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 3. MODAL HISTORIQUE DES DÉCOMPTES         -->
+<!-- ========================================== -->
+<div class="custom-modal-overlay" *ngIf="selectedMarcheForDecompteList" (click)="closeDecomptesListModal()">
+  <div class="custom-modal-dialog modal-lg" (click)="$event.stopPropagation()">
+    <div class="custom-modal-header">
+      <div class="d-flex align-items-center gap-2">
+        <span class="modal-icon">📋</span>
+        <h5 class="m-0 fw-bold">Historique des Décomptes - Marché N° {{ selectedMarcheForDecompteList.numMarche }}</h5>
+      </div>
+      <button type="button" class="btn-close-custom" (click)="closeDecomptesListModal()">✕</button>
+    </div>
+
+    <div class="custom-modal-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <strong>Budget Total :</strong> {{ (selectedMarcheForDecompteList.budget || 0) | number:'1.2-2' }} DH |
+          <strong class="text-danger">Reste à Payer :</strong> {{ (soldeRestantMap[selectedMarcheForDecompteList.id!] || 0) | number:'1.2-2' }} DH
+        </div>
+        <button class="btn btn-sm btn-success" (click)="openDecompteModal(selectedMarcheForDecompteList)">
+          ➕ Nouveau Décompte
+        </button>
+      </div>
+
+      <div *ngIf="isLoadingDecomptes" class="text-center py-4">
+        <div class="spinner-border text-primary" role="status"></div>
+      </div>
+
+      <div class="table-responsive" *ngIf="!isLoadingDecomptes">
+        <table class="table table-striped align-middle" *ngIf="decomptes.length > 0; else noDecomptes">
+          <thead class="table-light">
+          <tr>
+            <th>N°</th>
+            <th>Date</th>
+            <th>Montant Brut</th>
+            <th>Retenue (10%)</th>
+            <th>Montant Net</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let dec of decomptes">
+            <td><strong>{{ dec.numDecompte }}</strong></td>
+            <td>{{ dec.dateDecompte | date:'dd/MM/yyyy' }}</td>
+            <td class="fw-bold">{{ dec.montantBrut | number:'1.2-2' }} DH</td>
+            <td class="text-warning">{{ (dec.retenueGarantie || dec.montantBrut * 0.10) | number:'1.2-2' }} DH</td>
+            <td class="text-success fw-bold">{{ (dec.montantNet || dec.montantBrut * 0.90) | number:'1.2-2' }} DH</td>
+          </tr>
+          </tbody>
+        </table>
+        <ng-template #noDecomptes>
+          <div class="text-center py-4 text-muted">
+            <p class="mb-0">Aucun décompte enregistré pour ce marché.</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 4. MODAL DÉDIÉ AUX DOCUMENTS (GED)        -->
+<!-- ========================================== -->
+<div class="custom-modal-overlay" *ngIf="selectedMarcheForDocs" (click)="closeDocsModal()">
+  <div class="custom-modal-dialog modal-lg" (click)="$event.stopPropagation()">
+    <div class="custom-modal-header">
+      <div class="d-flex align-items-center gap-2">
+        <span class="modal-icon">📂</span>
+        <h5 class="m-0 fw-bold">Documents du Marché N° {{ selectedMarcheForDocs.numMarche }}</h5>
+      </div>
+      <button type="button" class="btn-close-custom" (click)="closeDocsModal()">✕</button>
+    </div>
+
+    <div class="custom-modal-body">
+      <div class="card p-3 mb-3 bg-light">
+        <div class="row g-2 align-items-center">
+          <div class="col-md-9">
+            <label class="form-label small fw-bold">Sélectionner un fichier</label>
+            <input
+              id="docFileInput"
+              type="file"
+              class="form-control form-control-sm"
+              (change)="onFileSelected($event)"
+            />
+          </div>
+          <div class="col-md-3 d-flex align-items-end">
+            <button
+              type="button"
+              class="btn btn-primary btn-sm w-100"
+              [disabled]="!selectedFile"
+              (click)="onUploadDoc()">
+              📤 Téléverser
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-striped align-middle" *ngIf="documents.length > 0; else noDocs">
+          <thead class="table-light">
+          <tr>
+            <th>Nom du fichier</th>
+            <th class="text-center" style="width: 200px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let doc of documents">
+            <td class="text-break">📄 {{ doc.nomFichier }}</td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-success me-1" (click)="onDownloadDoc(doc)" title="Télécharger">
+                📥 Télécharger
+              </button>
+              <button class="btn btn-sm btn-danger" (click)="onDeleteDoc(doc.id)" title="Supprimer">
+                🗑️
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <ng-template #noDocs>
+          <div class="text-center py-4 text-muted">
+            <p class="mb-0">Aucun document associé à ce marché.</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

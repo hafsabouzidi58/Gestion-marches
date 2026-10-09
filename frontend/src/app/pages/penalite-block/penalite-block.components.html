@@ -1,0 +1,71 @@
+<div class="penalite-container">
+
+  <!-- Sélecteur dynamique des marchés -->
+  <div class="marche-selector-card mb-4 p-3 bg-white shadow-sm rounded">
+    <label for="marcheSelect" class="form-label font-weight-bold">Sélectionner un marché à analyser :</label>
+
+    <div *ngIf="chargementMarches" class="text-muted">
+      Chargement de la liste des marchés...
+    </div>
+
+    <select *ngIf="!chargementMarches"
+            id="marcheSelect"
+            class="form-select"
+            [ngModel]="marcheId"
+            (ngModelChange)="onMarcheChange($event)">
+      <option *ngFor="let m of marchesDisponibles" [value]="m.id">
+        Marché #{{ m.id }} - {{ m.numMarche }} ({{ m.objetMarche }})
+      </option>
+    </select>
+  </div>
+
+  <!-- State: Chargement de la prédiction -->
+  <div *ngIf="chargementPrediction" class="text-center my-4">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p class="mt-2">Calcul des pénalités en cours...</p>
+  </div>
+
+  <!-- State: Erreur -->
+  <div *ngIf="erreur && !chargementPrediction" class="alert alert-warning">
+    ⚠️ {{ erreur }}
+  </div>
+
+  <!-- State: Résultats de la prédiction -->
+  <div class="penalite-card" *ngIf="prediction && !chargementPrediction">
+    <div class="card-header d-flex justify-content-between align-items-center"
+         [class.bg-danger]="prediction.ecartPct > 0"
+         [class.bg-success]="prediction.ecartPct <= 0">
+      <h3 class="text-white m-0">Pénalités & Risques Financiers</h3>
+      <span class="badge bg-light text-dark" *ngIf="prediction.ecartPct > 0">Chantier en retard</span>
+      <span class="badge bg-light text-dark" *ngIf="prediction.ecartPct <= 0">Dans les délais</span>
+    </div>
+
+    <div class="card-body p-4">
+      <div *ngIf="prediction.ecartPct > 0">
+        <div class="alert alert-danger">
+          <h4>{{ prediction.montantPenaliteEstime | currency:'MAD':'symbol':'1.2-2' }}</h4>
+          <p class="mb-0">de pénalités projetées pour <strong>{{ prediction.joursRetardEstimes }} jour(s)</strong> de retard estimé.</p>
+        </div>
+
+        <div class="jauge-container my-3">
+          <div class="d-flex justify-content-between">
+            <span>Plafond Légal (10% max)</span>
+            <strong>{{ getPourcentagePlafond() }}% atteint</strong>
+          </div>
+          <div class="progress mt-2" style="height: 20px;">
+            <div class="progress-bar bg-warning"
+                 role="progressbar"
+                 [style.width.%]="getPourcentagePlafond()">
+            </div>
+          </div>
+          <small class="text-muted">Plafond max : {{ prediction.montantPlafondMax | currency:'MAD':'symbol':'1.2-2' }}</small>
+        </div>
+      </div>
+
+      <div *ngIf="prediction.ecartPct <= 0" class="alert alert-success">
+        ✅ Aucun risque financier détecté. L'avancement actuel est conforme aux prévisions.
+      </div>
+    </div>
+  </div>
+
+</div>

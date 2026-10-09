@@ -1,0 +1,230 @@
+/* Styling du conteneur et polices */
+.fs-7 {
+  font-size: 0.825rem;
+}
+
+/* Styling du conteneur et polices */
+.fs-7 {
+  font-size: 0.825rem;
+}
+
+/* Modal backdrop flouté */
+.backdrop-blur {
+  background-color: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(4px);
+}
+
+.modal-styled {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Cartes de statistiques */
+.stat-card {
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08) !important;
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Variantes de couleurs douces */
+.bg-primary-soft { background-color: #e0f2fe; }
+.bg-warning-soft { background-color: #fef3c7; }
+.bg-success-soft { background-color: #dcfce7; }
+
+/* Tableau */
+.custom-card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.custom-table {
+  font-size: 0.9rem;
+}
+
+.custom-table thead th {
+  background-color: #f8fafc;
+  color: #475569;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 1rem;
+}
+
+.status-badge {
+  padding: 0.45em 0.8em;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.78rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.badge-encours {
+  background-color: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #ffedd5;
+}
+
+.badge-liberee {
+  background-color: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #dcfce7;
+}
+/* Modal backdrop flouté */
+.backdrop-blur {
+  background-color: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+/* Modales arrondies modernisées */
+.modal-styled {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.modal-styled .modal-header {
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.modal-styled .modal-footer {
+  border-top: 1px solid #f1f5f9;
+}
+
+/* Cartes de statistiques */
+.stat-card {
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08) !important;
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Variantes de couleurs douces pour icônes */
+.bg-primary-soft {
+  background-color: #e0f2fe;
+}
+
+.bg-warning-soft {
+  background-color: #fef3c7;
+}
+
+.bg-success-soft {
+  background-color: #dcfce7;
+}
+
+/* Tableau personnalisé */
+.custom-card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.custom-table {
+  font-size: 0.9rem;
+}
+
+.custom-table thead th {
+  background-color: #f8fafc;
+  color: #475569;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.custom-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.custom-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+/* Badges personnalisé */
+.type-badge {
+  font-weight: 500;
+  padding: 0.4em 0.75em;
+  border-radius: 6px;
+  letter-spacing: 0.02em;
+}
+
+.status-badge {
+  padding: 0.45em 0.8em;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.78rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.badge-encours {
+  background-color: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #ffedd5;
+}
+
+.badge-liberee {
+  background-color: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #dcfce7;
+}
+
+/* Boutons d'action */
+.action-btn {
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+}
+
+/* Champs de formulaires */
+.input-group-text {
+  color: #94a3b8;
+  border-color: #cbd5e1;
+}
+
+.form-control, .form-select {
+  border-color: #cbd5e1;
+  font-size: 0.9rem;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

@@ -1,0 +1,187 @@
+<div class="container my-4">
+
+  <!-- Step 1: Sélection du Marché -->
+  <div class="card mb-4 border-primary">
+    <div class="card-header bg-primary text-white font-weight-bold">
+      1. Sélectionner un Marché
+    </div>
+    <div class="card-body">
+      <div class="form-group mb-0">
+        <label>Veuillez choisir le marché à consulter ou mettre à jour :</label>
+        <select class="form-control" [(ngModel)]="selectedMarcheId" (change)="onMarcheChange()">
+          <option [ngValue]="null">-- Sélectionner un marché --</option>
+          <option *ngFor="let m of marches" [ngValue]="m.id">
+            Marché N° {{ m.numMarche }} - {{ m.objetMarche }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: Affichage des détails si un marché est sélectionné -->
+  <div *ngIf="selectedMarcheId">
+
+    <!-- Carte d'Indicateurs d'Avancement & Prédiction -->
+    <div *ngIf="prediction" class="card mb-4" [ngClass]="{'border-danger': prediction.alertePrioritaire, 'border-success': !prediction.alertePrioritaire}">
+      <div class="card-header font-weight-bold" [ngClass]="{'bg-danger text-white': prediction.alertePrioritaire, 'bg-light': !prediction.alertePrioritaire}">
+        Indicateurs d'Avancement & Prédiction (Marché N° {{ prediction.numMarche }})
+      </div>
+      <div class="card-body">
+        <div class="row text-center">
+
+          <!-- Prévu -->
+          <div class="col-md-3">
+            <h5 class="text-muted">Prévu</h5>
+            <span class="badge bg-info text-white p-2" style="font-size: 1.25rem;">
+          {{ prediction.avancementPrevuPct }}%
+        </span>
+          </div>
+
+          <!-- Réel -->
+          <div class="col-md-3">
+            <h5 class="text-muted">Réel</h5>
+            <span class="badge bg-primary text-white p-2" style="font-size: 1.25rem;">
+          {{ prediction.avancementReelPct ?? 0 }}%
+        </span>
+          </div>
+
+          <!-- Écart -->
+          <div class="col-md-3">
+            <h5 class="text-muted">Écart</h5>
+            <span class="badge p-2 text-white"
+                  [ngClass]="prediction.ecartPct > 0 ? 'bg-danger' : 'bg-success'"
+                  style="font-size: 1.25rem;">
+          {{ prediction.ecartPct }}%
+        </span>
+          </div>
+
+          <!-- Pénalités Estimées -->
+          <div class="col-md-3">
+            <h5 class="text-muted">Pénalités Estimées</h5>
+            <span class="font-weight-bold text-danger d-block mt-1" style="font-size: 1.25rem;">
+          {{ prediction.montantPenaliteEstime | number:'1.2-2' }} DH
+        </span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-4 px-3" *ngIf="prediction">
+      <!-- Barre Prévu -->
+      <div class="col-md-6 mb-3">
+        <div class="d-flex justify-content-between mb-1">
+          <small class="font-weight-bold text-muted">Progression Prévue</small>
+          <small class="font-weight-bold">{{ prediction.avancementPrevuPct }}%</small>
+        </div>
+        <div class="progress" style="height: 16px;">
+          <div class="progress-bar bg-info" [style.width.%]="prediction.avancementPrevuPct"></div>
+        </div>
+      </div>
+
+      <!-- Barre Réel -->
+      <div class="col-md-6 mb-3">
+        <div class="d-flex justify-content-between mb-1">
+          <small class="font-weight-bold text-muted">Progression Réelle</small>
+          <small class="font-weight-bold">{{ prediction.avancementReelPct ?? 0 }}%</small>
+        </div>
+        <div class="progress" style="height: 16px;">
+          <div class="progress-bar"
+               [style.width.%]="prediction.avancementReelPct ?? 0"
+               [ngClass]="(prediction.ecartPct ?? 0) > 0 ? 'bg-danger' : 'bg-success'">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulaire de Saisie -->
+    <div class="card mb-4">
+      <div class="card-header font-weight-bold">2. Saisir un nouvel avancement</div>
+      <div class="card-body">
+        <form (ngSubmit)="soumettreFormulaire()">
+          <div class="form-group mb-3">
+            <label>Taux Réel (%) :</label>
+            <input type="number" step="0.01" class="form-control" [(ngModel)]="tauxReel" name="tauxReel" required />
+          </div>
+          <div class="form-group mb-3">
+            <label>Description / Observations :</label>
+            <textarea class="form-control" [(ngModel)]="description" name="description" rows="3" required></textarea>
+          </div>
+          <div class="form-group mb-3">
+            <label>Pièces Jointes :</label>
+            <input
+              #fileInput
+              type="file"
+              class="form-control-file"
+              (change)="onFileChange($event)"
+              multiple />
+
+            <!-- Liste des fichiers accumulés -->
+            <div *ngIf="fichiers.length > 0" class="mt-2">
+              <small class="font-weight-bold text-muted d-block mb-1">Fichiers sélectionnés ({{ fichiers.length }}) :</small>
+              <ul class="list-group list-group-flush">
+                <li *ngFor="let f of fichiers; let i = index" class="list-group-item d-flex justify-content-between align-items-center py-1 px-2 bg-light">
+                  <small>📄 {{ f.name }} <span class="text-muted">({{ (f.size / 1024).toFixed(1) }} KB)</span></small>
+                  <button type="button" class="btn btn-sm btn-link text-danger p-0 ms-2" (click)="retirerFichier(i)">
+                    ❌
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-success">Enregistrer l'avancement</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Historique -->
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span class="font-weight-bold">Historique des Avancements</span>
+        <div class="d-flex" style="width: 300px;">
+          <input type="text" class="form-control form-control-sm mr-2" placeholder="Rechercher..." [(ngModel)]="searchKeyword" (keyup.enter)="onSearch()" />
+          <button class="btn btn-sm btn-outline-secondary" (click)="onSearch()">Filtrer</button>
+        </div>
+      </div>
+      <div class="card-body p-0">
+        <table class="table table-striped mb-0">
+          <thead>
+          <tr>
+            <th>Date</th>
+            <th>Prévu (%)</th>
+            <th>Réel (%)</th>
+            <th>Description</th>
+            <th>Pièces Jointes</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let item of historique">
+            <td>{{ item.dateAvancement }}</td>
+            <td>{{ item.tauxPrevu }}%</td>
+            <td><strong>{{ item.tauxReel }}%</strong></td>
+            <td>{{ item.description }}</td>
+            <td>
+              <ul class="list-unstyled mb-0">
+                <li *ngFor="let file of item.piecesJointes">
+                  <a href="javascript:void(0)" (click)="ouvrirFichier(file.nomFichier)" class="text-primary font-weight-bold">
+                    📁 {{ file.nomFichier }}
+                  </a>
+                </li>
+              </ul>
+            </td>
+            <td>
+              <button class="btn btn-sm btn-danger" (click)="supprimerAvancement(item.id)">Supprimer</button>
+            </td>
+          </tr>
+          <tr *ngIf="historique.length === 0">
+            <td colspan="6" class="text-center py-3 text-muted">Aucun avancement enregistré pour ce marché.</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+</div>

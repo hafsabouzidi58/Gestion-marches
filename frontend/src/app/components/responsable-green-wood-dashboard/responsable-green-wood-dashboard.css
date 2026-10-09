@@ -1,0 +1,16 @@
+.card {
+  border-radius: 10px;
+}
+
+.border-start.border-danger {
+  border-left-width: 5px !important;
+}
+
+.progress {
+  border-radius: 10px;
+  background-color: #e9ecef;
+}
+
+.badge {
+  font-size: 0.75rem;
+}

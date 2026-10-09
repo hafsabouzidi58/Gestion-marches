@@ -1,0 +1,163 @@
+<div class="dashboard-container">
+  <!-- En-tête -->
+  <div class="dashboard-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="h3 fw-bold text-dark mb-1">Tableau de Bord — Gestion des Marchés</h1>
+      <p class="text-muted mb-0">Vue d'ensemble des indicateurs clés, du budget et des échéances.</p>
+    </div>
+    <div class="d-flex gap-2">
+      <a routerLink="/responsable-marches/marches" class="btn btn-outline-primary shadow-sm">
+        📋 Voir tous les marchés
+      </a>
+      <a routerLink="/responsable-marches/marches/nouveau" class="btn btn-primary shadow-sm">
+        ➕ Nouveau Marché
+      </a>
+    </div>
+  </div>
+
+  <!-- Cartes KPI -->
+  <div class="row g-3 mb-4">
+    <!-- Card 1: Total Marchés -->
+    <div class="col-xl-3 col-md-6">
+      <div class="card kpi-card border-0 shadow-sm gradient-blue">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <span class="kpi-label">Total Marchés</span>
+              <h3 class="kpi-value mb-0">{{ marches.length }}</h3>
+            </div>
+            <div class="kpi-icon">📁</div>
+          </div>
+          <div class="mt-2 text-white-50 small">
+            <span class="fw-bold text-white">{{ activeMarchesCount }}</span> marchés actuellement actifs
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Budget Global -->
+    <div class="col-xl-3 col-md-6">
+      <div class="card kpi-card border-0 shadow-sm gradient-green">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <span class="kpi-label">Budget Engagement Global</span>
+              <h3 class="kpi-value mb-0">{{ totalBudget | number:'1.2-2' }} <small class="fs-6">DH</small></h3>
+            </div>
+            <div class="kpi-icon">💎</div>
+          </div>
+          <div class="mt-2 text-white-50 small">
+            Consommé : <span class="fw-bold text-white">{{ totalConsomme | number:'1.2-2' }} DH</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3: Solde Restant -->
+    <div class="col-xl-3 col-md-6">
+      <div class="card kpi-card border-0 shadow-sm gradient-purple">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <span class="kpi-label">Reste à Payer Global</span>
+              <h3 class="kpi-value mb-0">{{ soldeGlobal | number:'1.2-2' }} <small class="fs-6">DH</small></h3>
+            </div>
+            <div class="kpi-icon">💰</div>
+          </div>
+          <div class="mt-2 text-white-50 small">
+            Taux d'exécution : <span class="fw-bold text-white">{{ tauxConsommation | number:'1.1-1' }}%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4: Alertes Échéances -->
+    <div class="col-xl-3 col-md-6">
+      <div class="card kpi-card border-0 shadow-sm gradient-orange">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <span class="kpi-label">Échéances (30 jours)</span>
+              <h3 class="kpi-value mb-0">{{ alertesCount }}</h3>
+            </div>
+            <div class="kpi-icon">⚠️</div>
+          </div>
+          <div class="mt-2 text-white-50 small">
+            <span class="fw-bold text-white">Attention requise</span> sur les contrats proches du terme
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Graphiques de Synthèse -->
+  <div class="row g-3 mb-4">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+          <h5 class="card-title fw-bold text-dark mb-0">📊 Analyse Budgétaire</h5>
+          <span class="badge bg-light text-dark border">En DH</span>
+        </div>
+        <div class="card-body">
+          <div class="chart-container" style="position: relative; height: 300px;">
+            <canvas id="budgetChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-white border-0 py-3">
+          <h5 class="card-title fw-bold text-dark mb-0">📌 Répartition par Statut</h5>
+        </div>
+        <div class="card-body">
+          <div class="chart-container" style="position: relative; height: 300px;">
+            <canvas id="statusChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tableau Récapitulatif -->
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+      <h5 class="card-title fw-bold text-dark mb-0">🕒 Derniers Marchés</h5>
+      <a routerLink="/responsable-marches/marches" class="btn btn-sm btn-link text-primary fw-semibold">
+        Tout afficher →
+      </a>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+        <tr>
+          <th>N° Marché</th>
+          <th>Objet</th>
+          <th>Prestataire</th>
+          <th>Budget Total</th>
+          <th>Fin Prévue</th>
+          <th>Statut</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let m of marches.slice(0, 5)">
+          <td><strong class="text-primary">{{ m.numMarche }}</strong></td>
+          <td>{{ m.objetMarche }}</td>
+          <td>{{ m.nomPrestataire || 'N/A' }}</td>
+          <td class="fw-bold">{{ (m.budget || 0) | number:'1.2-2' }} DH</td>
+          <td>{{ m.dateFinPrevue | date:'dd/MM/yyyy' }}</td>
+          <td>
+              <span class="badge rounded-pill" [ngClass]="m.actif ? 'bg-success-subtle text-success border border-success' : 'bg-secondary-subtle text-secondary border border-secondary'">
+                {{ m.actif ? 'Actif' : 'Inactif' }}
+              </span>
+          </td>
+        </tr>
+        <tr *ngIf="marches.length === 0">
+          <td colspan="6" class="text-center text-muted py-4">Aucun marché enregistré pour le moment.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,170 @@
+/* Container principal */
+.container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Carte du formulaire */
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* En-tête de la carte */
+.card-header {
+  background: linear-gradient(135deg, #1e4620 0%, #2e7d32 100%);
+  color: #ffffff;
+  padding: 1.5rem 2rem;
+  border-bottom: none;
+}
+
+.card-header h4 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Corps du formulaire */
+.card-body {
+  padding: 2rem;
+}
+
+/* Styling des champs de saisie */
+.form-label {
+  display: block;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.form-control, .form-select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  color: #333333;
+  background-color: #f8f9fa;
+  border: 1.5px solid #dee2e6;
+  border-radius: 10px;
+  transition: all 0.25s ease-in-out;
+  box-sizing: border-box;
+}
+
+.form-control:focus, .form-select:focus {
+  background-color: #ffffff;
+  border-color: #2e7d32;
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(46, 125, 50, 0.15);
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* Gestion des erreurs de validation */
+.form-control.is-invalid {
+  border-color: #d32f2f;
+  background-color: #fff8f8;
+}
+
+.invalid-feedback {
+  color: #d32f2f;
+  font-size: 0.85rem;
+  margin-top: 0.4rem;
+  font-weight: 500;
+}
+
+/* Zone des pièces jointes / Liste de fichiers */
+.list-group {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0 0;
+}
+
+.list-group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: #f1f3f5;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+/* Boutons */
+.btn-success {
+  background-color: #2e7d32;
+  color: #ffffff;
+  border: none;
+  padding: 0.8rem 1.8rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-success:hover:not(:disabled) {
+  background-color: #1b5e20;
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-success:disabled {
+  background-color: #a5d6a7;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.btn-outline-danger {
+  background: transparent;
+  color: #d32f2f;
+  border: 1px solid #d32f2f;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-danger:hover {
+  background-color: #d32f2f;
+  color: #ffffff;
+}
+
+/* Alerts / Notifications */
+.alert {
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.alert-success {
+  background-color: #e8f5e9;
+  color: #1b5e20;
+  border: 1px solid #c8e6c9;
+}
+
+.alert-danger {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}

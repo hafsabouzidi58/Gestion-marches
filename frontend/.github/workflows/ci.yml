@@ -1,0 +1,47 @@
+name: Spring Boot CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    # Démarre un conteneur PostgreSQL temporaire pour que les tests puissent s'y connecter
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: gestion_marches_db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgresql
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Recuperer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Compiler et tester
+        run: mvn -B verify
+
+      - name: Sauvegarder le JAR (Artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-jar
+          path: target/*.jar

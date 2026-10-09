@@ -1,0 +1,94 @@
+<div class="container mt-4 mb-5">
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">{{ isEditMode ? '✏️ Modifier le Marché' : '➕ Nouveau Marché' }}</h4>
+    </div>
+    <div class="card-body p-4">
+      <form (ngSubmit)="onSubmit()" #marcheForm="ngForm">
+
+        <!-- Section 1: Infos Générales -->
+        <h5 class="text-secondary border-bottom pb-2 mb-3">Informations Générales</h5>
+        <div class="row g-3 mb-4">
+          <div class="col-md-4">
+            <label class="form-label font-weight-bold">N° du Marché *</label>
+            <input type="text" class="form-control" [(ngModel)]="marche.numMarche" name="numMarche" required />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Mode de Passation</label>
+            <select class="form-select" [(ngModel)]="marche.modePassation" name="modePassation">
+              <option value="Appel d'offres ouvert" class="select-option">Appel d'offres ouvert</option>
+              <option value="Appel d'offres restreint" class="select-option">Appel d'offres restreint</option>
+              <option value="Marché négocié" class="select-option">Marché négocié</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">N° Visa</label>
+            <input type="text" class="form-control" [(ngModel)]="marche.visaNumero" name="visaNumero" />
+          </div>
+          <div class="col-md-12">
+            <label class="form-label">Objet du Marché *</label>
+            <textarea class="form-control" rows="2" [(ngModel)]="marche.objetMarche" name="objetMarche" required></textarea>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Date d'Approbation</label>
+            <input type="date" class="form-control" [(ngModel)]="marche.dateApprobation" name="dateApprobation" />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Date de Fin Prévue (pour Alertes)</label>
+            <input type="date" class="form-control" [(ngModel)]="marche.dateFinPrevue" name="dateFinPrevue" />
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="prestataire" class="form-label">Prestataire</label>
+            <select
+              id="prestataire"
+              class="form-select"
+              [(ngModel)]="marche.prestataireId"
+              name="prestataireId">
+              <option [ngValue]="undefined" class="select-option">-- Sélectionner un prestataire --</option>
+              <option *ngFor="let p of prestataires" [value]="p.id" class="select-option">
+                {{ p.nomSociete || p.nom || p.nomPrestataire || p.raisonSociale }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Section 2: Imputation Budgétaire -->
+        <h5 class="text-secondary border-bottom pb-2 mb-3">Imputation Budgétaire</h5>
+        <div class="row g-3 mb-4">
+          <div class="col-md-2">
+            <label class="form-label">Exercice</label>
+            <input type="text" class="form-control" [(ngModel)]="marche.exercice" name="exercice" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Budget</label>
+            <input type="text" class="form-control" [(ngModel)]="marche.budget" name="budget" placeholder="ex: Fonctionnement" />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Article</label>
+            <input type="text" class="form-control" [(ngModel)]="marche.article" name="article" />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Paragraphe</label>
+            <input type="text" class="form-control" [(ngModel)]="marche.paragraphe" name="paragraphe" />
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Ligne</label>
+            <input type="text" class="form-control" [(ngModel)]="marche.ligne" name="ligne" />
+          </div>
+          <div class="col-md-12">
+            <label class="form-label">Rubrique</label>
+            <input type="text" class="form-control" [(ngModel)]="marche.rubrique" name="rubrique" />
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+          <a routerLink="/responsable-marches/marches" class="btn btn-outline-secondary">Annuler</a>
+          <button type="submit" class="btn btn-success" [disabled]="!marcheForm.form.valid">
+            💾 {{ isEditMode ? 'Enregistrer les modifications' : 'Créer le marché' }}
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

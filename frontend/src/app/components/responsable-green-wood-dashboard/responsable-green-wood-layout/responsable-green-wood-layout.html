@@ -1,0 +1,66 @@
+<div class="layout-wrapper">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>🌲 Green Wood</h2>
+    </div>
+    <nav class="sidebar-nav">
+      <ul>
+        <li>
+          <a routerLink="/green-wood/dashboard" routerLinkActive="active">
+            📊 Tableau de Bord
+          </a>
+        </li>
+        <li>
+          <a routerLink="/green-wood/marches" routerLinkActive="active">
+            📜 Consulter vos marchés
+          </a>
+        </li>
+        <div class="nav-item my-2">
+          <a
+            routerLink="/green-wood/mes-infos"
+            routerLinkActive="active"
+            class="btn btn-outline-success w-100 text-start d-flex align-items-center gap-2">
+            <span>🏢</span>
+            <span>Mes Infos Prestataire</span>
+          </a>
+        </div>
+        <li>
+          <a routerLink="/green-wood/declarer-probleme" routerLinkActive="active">
+            ⚠️ Signaler un problème
+          </a>
+        </li>
+        <li>
+          <a routerLink="/green-wood/avancements" routerLinkActive="active">
+            📈 Suivi des Avancements
+          </a>
+        </li>
+        <li>
+          <a routerLink="/green-wood/penalites" routerLinkActive="active">
+            ⚠️ Pénalités & Risques
+          </a>
+        </li>
+        <li>
+          <a routerLink="/green-wood/mon-compte" routerLinkActive="active">
+            👤 Mon Compte
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content Area -->
+  <div class="main-content">
+    <!-- Navbar -->
+    <header class="navbar">
+      <span class="user-info">Connecté en tant que <strong>Responsable de Green Wood</strong></span>
+      <button class="logout-btn" (click)="logout()">Déconnexion</button>
+    </header>
+
+    <!-- Zone dynamique -->
+    <main class="content-body">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

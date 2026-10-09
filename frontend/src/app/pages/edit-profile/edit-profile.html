@@ -1,0 +1,135 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7 col-md-9">
+
+      <!-- Carte principale -->
+      <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+
+        <!-- En-tête -->
+        <div class="card-header bg-gradient-primary text-white p-4 border-0">
+          <div class="d-flex align-items-center gap-3">
+            <div class="avatar-icon-wrapper rounded-circle bg-white text-primary p-3 d-flex align-items-center justify-content-center">
+              <span class="fs-3">👤</span>
+            </div>
+            <div>
+              <h4 class="fw-bold mb-1">Mon Compte</h4>
+              <p class="mb-0 opacity-75 text-sm">Gérez vos informations personnelles et votre mot de passe</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Corps du formulaire -->
+        <div class="card-body p-4 p-md-5">
+          <form (ngSubmit)="onSubmit()" #profileForm="ngForm">
+
+            <div class="row g-4">
+
+              <!-- Champ Nom -->
+              <div class="col-md-6">
+                <label for="nom" class="form-label fw-semibold text-dark">
+                  Nom <span class="text-danger">*</span>
+                </label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-end-0 text-muted">🪪</span>
+                  <input
+                    type="text"
+                    id="nom"
+                    class="form-control bg-light border-start-0 ps-0"
+                    [(ngModel)]="user.nom"
+                    name="nom"
+                    placeholder="Votre nom"
+                    required
+                  />
+                </div>
+              </div>
+
+              <!-- Champ Prénom -->
+              <div class="col-md-6">
+                <label for="prenom" class="form-label fw-semibold text-dark">
+                  Prénom <span class="text-danger">*</span>
+                </label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-end-0 text-muted">🏷️</span>
+                  <input
+                    type="text"
+                    id="prenom"
+                    class="form-control bg-light border-start-0 ps-0"
+                    [(ngModel)]="user.prenom"
+                    name="prenom"
+                    placeholder="Votre prénom"
+                    required
+                  />
+                </div>
+              </div>
+
+              <!-- Champ Email -->
+              <div class="col-12">
+                <label for="email" class="form-label fw-semibold text-dark">
+                  Adresse Email <span class="text-danger">*</span>
+                </label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-end-0 text-muted">✉️</span>
+                  <input
+                    type="email"
+                    id="email"
+                    class="form-control bg-light border-start-0 ps-0"
+                    [(ngModel)]="user.email"
+                    name="email"
+                    placeholder="exemple@domaine.com"
+                    required
+                    email
+                  />
+                </div>
+              </div>
+
+              <!-- Champ Nouveau Mot de passe -->
+              <div class="col-12">
+                <label for="motDePasseHash" class="form-label fw-semibold text-dark">
+                  Nouveau Mot de passe <span class="text-muted fw-normal" style="font-size: 0.85rem;">(laisser vide pour ne pas modifier)</span>
+                </label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-end-0 text-muted">🔒</span>
+                  <input
+                    type="password"
+                    id="motDePasseHash"
+                    class="form-control bg-light border-start-0 ps-0"
+                    [(ngModel)]="user.motDePasseHash"
+                    name="motDePasseHash"
+                    placeholder="Nouveau mot de passe"
+                  />
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Séparateur -->
+            <hr class="my-4 text-muted opacity-25">
+
+            <!-- Boutons d'action -->
+            <div class="d-flex align-items-center justify-content-end gap-3">
+              <button
+                type="button"
+                class="btn btn-light px-4 py-2 rounded-pill fw-semibold text-secondary"
+                (click)="onCancel()"
+              >
+                Annuler
+              </button>
+
+              <button
+                type="submit"
+                class="btn btn-primary px-4 py-2 rounded-pill fw-semibold shadow-sm"
+                [disabled]="!profileForm.form.valid || isLoading"
+              >
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                💾 Enregistrer les modifications
+              </button>
+            </div>
+
+          </form>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>

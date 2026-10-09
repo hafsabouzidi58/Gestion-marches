@@ -1,0 +1,153 @@
+<div class="container-fluid">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold text-success">🌲 Consulter les Marchés Green Wood</h3>
+  </div>
+
+  <!-- Barre de Recherche et Filtres -->
+  <div class="card p-3 mb-4 bg-white shadow-sm border-0 rounded-3">
+    <div class="row g-3 align-items-center">
+      <div class="col-md-7">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Rechercher par N° Marché, Objet, Prestataire..."
+            [(ngModel)]="searchTerm"
+            (keyup.enter)="onSearch()"
+          />
+          <button class="btn btn-success" (click)="onSearch()">🔍 Rechercher</button>
+        </div>
+      </div>
+
+      <div class="col-md-5 text-end">
+        <button
+          class="btn me-2"
+          [ngClass]="isAlerteMode ? 'btn-danger' : 'btn-outline-danger'"
+          (click)="loadAlertes()">
+          ⚠️ Alertes Échéance (30j)
+        </button>
+        <button *ngIf="isAlerteMode || searchTerm" class="btn btn-outline-secondary" (click)="resetFilters()">
+          🔄 Réinitialiser
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tableau des marchés -->
+  <div class="table-responsive shadow-sm rounded-3 bg-white">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-dark">
+      <tr>
+        <th>N° Marché</th>
+        <th>Objet</th>
+        <th>Prestataire</th>
+        <th>Date Fin Prévue</th>
+        <th>⏱️ Temps Restant (Chrono)</th>
+        <th>Statut</th>
+        <th class="text-center">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let m of marches" [class.table-disabled]="!m.actif">
+        <td><strong class="text-success">{{ m.numMarche }}</strong></td>
+        <td>{{ m.objetMarche }}</td>
+        <td>{{ m.nomPrestataire || 'N/A' }}</td>
+        <td>{{ m.dateFinPrevue | date:'dd/MM/yyyy' }}</td>
+
+        <!-- Badge Chrono Temp Réel -->
+        <td>
+          <ng-container *ngIf="getCountdown(m.id!) as cd">
+              <span
+                class="badge p-2"
+                [ngClass]="{
+                  'bg-danger': cd.isOverdue || cd.days < 7,
+                  'bg-warning text-dark': !cd.isOverdue && cd.days >= 7 && cd.days <= 30,
+                  'bg-success': !cd.isOverdue && cd.days > 30
+                }">
+                ⏱️ {{ cd.text }}
+              </span>
+          </ng-container>
+          <span *ngIf="!m.dateFinPrevue" class="text-muted small">Non définie</span>
+        </td>
+
+        <td>
+            <span class="status-badge" [ngClass]="m.actif ? 'active' : 'inactive'">
+              {{ m.actif ? '● Actif' : '○ Inactif' }}
+            </span>
+        </td>
+        <td class="text-center">
+          <button class="btn btn-sm btn-outline-info me-1" (click)="openDetailsModal(m)" title="Consulter les détails">
+            👁️ Consulter
+          </button>
+
+
+        </td>
+      </tr>
+      <tr *ngIf="marches.length === 0">
+        <td colspan="7" class="text-center text-muted py-4">Aucun marché trouvé.</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- MODAL DÉTAILS DU MARCHÉ (CONSULTATION)      -->
+<!-- ========================================== -->
+<div class="custom-modal-overlay" *ngIf="selectedMarcheDetails" (click)="closeDetailsModal()">
+  <div class="custom-modal-dialog" (click)="$event.stopPropagation()">
+    <div class="custom-modal-header">
+      <div class="d-flex align-items-center gap-2">
+        <span class="modal-icon">📄</span>
+        <h5 class="m-0 fw-bold">Détails du Marché N° {{ selectedMarcheDetails.numMarche }}</h5>
+      </div>
+      <button type="button" class="btn-close-custom" (click)="closeDetailsModal()">✕</button>
+    </div>
+
+    <div class="custom-modal-body">
+      <!-- Section 1 : Informations Générales -->
+      <div class="detail-card mb-4">
+        <h6 class="detail-card-title">📌 Informations Générales</h6>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-label">Mode de Passation</span>
+            <span class="detail-value">{{ selectedMarcheDetails.modePassation || 'N/A' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">N° Visa</span>
+            <span class="detail-value">{{ selectedMarcheDetails.visaNumero || 'N/A' }}</span>
+          </div>
+          <div class="detail-item full-width">
+            <span class="detail-label">Objet du Marché</span>
+            <span class="detail-value fw-semibold text-dark">{{ selectedMarcheDetails.objetMarche }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Prestataire</span>
+            <span class="detail-value text-primary fw-bold">{{ selectedMarcheDetails.nomPrestataire || 'N/A' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Date Fin Prévue</span>
+            <span class="detail-value text-danger fw-bold">{{ selectedMarcheDetails.dateFinPrevue | date:'dd/MM/yyyy' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2 : Données Financières (Consultation uniquement) -->
+      <div class="detail-card mb-4">
+        <h6 class="detail-card-title">🔒 Données Financières (Lecture Seule)</h6>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <span class="detail-label">Exercice</span>
+            <span class="detail-value">{{ selectedMarcheDetails.exercice || 'N/A' }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Budget Total</span>
+            <span class="detail-value text-success fw-bold">{{ selectedMarcheDetails.budget }} DH</span>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+</div>

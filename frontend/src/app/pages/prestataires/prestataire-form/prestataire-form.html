@@ -1,0 +1,132 @@
+<div class="form-container">
+  <!-- En-tête -->
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">
+        {{ isEditMode ? '✏️ Modifier le Prestataire' : '➕ Nouveau Prestataire' }}
+      </h2>
+      <p class="page-subtitle">Renseignez les informations administratives du prestataire</p>
+    </div>
+    <button class="btn-secondary-custom" routerLink="/responsable-marches/prestataires">
+      ⬅️ Retour à la liste
+    </button>
+  </div>
+
+  <!-- Formulaire Card -->
+  <div class="form-card">
+    <form (ngSubmit)="onSubmit()" #prestataireForm="ngForm">
+      <div class="form-grid">
+
+        <!-- Nom Société -->
+        <div class="form-group full-width">
+          <label for="nomSociete">Raison Sociale / Nom Société *</label>
+          <input
+            type="text"
+            id="nomSociete"
+            name="nomSociete"
+            class="form-control"
+            [(ngModel)]="prestataire.nomSociete"
+            required>
+        </div>
+
+        <div class="form-group">
+          <label for="rc">Registre du Commerce (RC)</label>
+          <input
+            type="text"
+            id="rc"
+            name="rc"
+            class="form-control"
+            [(ngModel)]="prestataire.rc">
+        </div>
+
+        <div class="form-group">
+          <label for="patente">N° Patente</label>
+          <input
+            type="text"
+            id="patente"
+            name="patente"
+            class="form-control"
+            [(ngModel)]="prestataire.patente">
+        </div>
+
+        <div class="form-group">
+          <label for="identifiantFiscal">Identifiant Fiscal (IF)</label>
+          <input
+            type="text"
+            id="identifiantFiscal"
+            name="identifiantFiscal"
+            class="form-control"
+            [(ngModel)]="prestataire.identifiantFiscal">
+        </div>
+
+        <!-- Champ CNSS ajouté -->
+        <div class="form-group">
+          <label for="cnss">N° CNSS</label>
+          <input
+            type="text"
+            id="cnss"
+            name="cnss"
+            class="form-control"
+            [(ngModel)]="prestataire.cnss">
+        </div>
+
+        <!-- Informations Financières -->
+        <div class="form-group">
+          <label for="banque">Banque</label>
+          <input
+            type="text"
+            id="banque"
+            name="banque"
+            class="form-control"
+            [(ngModel)]="prestataire.banque">
+        </div>
+
+        <div class="form-group full-width">
+          <label for="cle_rib">Relevé d'Identité Bancaire (RIB)</label>
+          <input
+            type="text"
+            id="cle_rib"
+            name="cle_rib"
+            class="form-control"
+            [(ngModel)]="prestataire.cle_rib">
+        </div>
+
+
+
+
+
+        <div class="form-group full-width">
+          <label for="adresse">Adresse complète</label>
+          <textarea
+            id="adresse"
+            name="adresse"
+            rows="3"
+            class="form-control"
+            [(ngModel)]="prestataire.adresse"></textarea>
+        </div>
+
+        <!-- Statut Actif -->
+        <div class="form-group full-width checkbox-group">
+          <label class="checkbox-label">
+            <input
+              type="checkbox"
+              name="actif"
+              [(ngModel)]="prestataire.actif">
+            <span>Prestataire actif</span>
+          </label>
+        </div>
+
+      </div>
+
+      <!-- Actions du Formulaire -->
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" routerLink="/responsable-marches/prestataires">
+          Annuler
+        </button>
+        <button type="submit" class="btn-submit" [disabled]="!prestataireForm.form.valid">
+          {{ isEditMode ? 'Enregistrer les modifications' : 'Créer le prestataire' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

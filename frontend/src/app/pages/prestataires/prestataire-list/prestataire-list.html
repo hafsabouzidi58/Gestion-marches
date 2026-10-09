@@ -1,0 +1,79 @@
+<div class="form-container">
+  <!-- En-tête -->
+  <div class="page-header">
+    <div>
+      <h2 class="page-title">🏢 Gestion des Prestataires</h2>
+      <p class="page-subtitle">Consultez, recherchez et gérez les prestataires enregistrés</p>
+    </div>
+    <button class="btn-submit" routerLink="/responsable-marches/prestataires/nouveau">
+      ➕ Nouveau Prestataire
+    </button>
+  </div>
+
+  <!-- Carte de Recherche -->
+  <div class="form-card mb-4">
+    <div class="form-group full-width">
+      <label for="search">Rechercher un prestataire</label>
+      <input
+        type="text"
+        id="search"
+        class="form-control"
+        placeholder="Rechercher par Nom, RC, Patente, IF, CNSS..."
+        [(ngModel)]="searchTerm"
+        (input)="onSearch()">
+    </div>
+  </div>
+
+  <!-- Carte Tableau -->
+  <div class="form-card">
+    <div class="table-responsive">
+      <table class="custom-table">
+        <thead>
+        <tr>
+          <th>Raison Sociale</th>
+          <th>RC</th>
+          <th>Patente</th>
+          <th>IF</th>
+          <th>CNSS</th>
+          <th>Banque</th>
+          <th>RIB</th>
+          <th>Statut</th>
+          <th class="text-center">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let p of filteredPrestataires">
+          <td><strong>{{ p.nomSociete }}</strong></td>
+          <td>{{ p.rc || '-' }}</td>
+          <td>{{ p.patente || '-' }}</td>
+          <td>{{ p.identifiantFiscal || '-' }}</td>
+          <td>{{ p.cnss || '-' }}</td>
+          <td>{{ p.banque || '-' }}</td>
+          <td>{{ p.cle_rib || '-' }}</td>
+          <td>
+              <span class="status-badge" [ngClass]="p.actif ? 'active' : 'inactive'">
+                {{ p.actif ? '● Actif' : '○ Inactif' }}
+              </span>
+          </td>
+          <td class="actions-cell">
+            <button class="action-btn btn-status" (click)="onToggleStatus(p.id!)" title="Changer statut">
+              🔄
+            </button>
+            <button class="action-btn btn-edit" [routerLink]="['/responsable-marches/prestataires/edit', p.id]" title="Éditer">
+              ✏️
+            </button>
+            <button class="action-btn btn-delete" (click)="onDelete(p.id!)" title="Supprimer">
+              🗑️
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredPrestataires.length === 0">
+          <td colspan="9" class="empty-state">
+            Aucun prestataire trouvé.
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
